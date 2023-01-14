@@ -1,9 +1,14 @@
 import React from 'react'
 import { useAtom } from 'jotai'
-import { modalAtom } from '../global-states/atoms'
+import { modalAtom, imageObjectAtom } from '../global-states/atoms'
 
 const Modal = () => {
-    const [modal, setModal] = useAtom(modalAtom)
+    const [modal, setModal] = useAtom(modalAtom);
+    const [linksArray, setLinksArray] = useAtom(imageObjectAtom);
+    const [url, setUrl] = React.useState<string>('');
+    const [desc, setDesc] = React.useState<string>('');
+
+
   return (
     <div  onClick={() => {
         setModal(false)
@@ -14,12 +19,28 @@ const Modal = () => {
     }} className='bg-white w-[38.75rem] h-[23rem] flex flex-col  justify-center items-center gap-4 px-10 rounded-xl'>
         <span className='text-2xl font-semibold' >Add a photo</span>
         <label className='self-start  text-xs font-semibold' htmlFor="name">Label</label>
-        <input className='w-[34.5rem] border border-gray-200 rounded-xl p-2' type="text" placeholder='Enter Name' />
+        <input  onChange={(e) => {
+            setDesc(e.target.value)
+        }}  className='w-[34.5rem] border border-gray-200 rounded-xl p-2' type="text" placeholder='Enter Name' />
         <label className='self-start text-xs font-semibold' htmlFor="Photo URL">Photo URL</label>
-        <input className='w-[34.5rem] border border-gray-200 rounded-xl p-2' type="text" placeholder='Enter Link'/>
+        <input 
+            onChange={(e) => {
+                setUrl(e.target.value)
+            }}
+
+         className='w-[34.5rem] border border-gray-200 rounded-xl p-2' type="text" placeholder='Enter Link'/>
         <div className='flex gap-4 self-end'>
-            <button className='bg-red-500 rounded-xl w-[9.5rem] text-white  p-2' > Cancel </button>
-            <button className='bg-[#3DB46D] rounded-xl w-[9.5rem] text-white  p-2' > Add a photo </button>
+            <button onClick={() => {setModal(false)}} className='bg-red-500 rounded-xl w-[9.5rem] text-white  p-2' > Cancel </button>
+            <button disabled={
+                // disabled if url is empty or description is empty
+                desc.length === 0 || url.length === 0 || !url.includes(`unsplash.com`) || !url.includes(`https://`)
+            } onClick={() => {
+                setModal(false)
+                setLinksArray((prev) => [...prev, {
+                    url: url,
+                    description: desc
+                }])
+            }} className='bg-[#3DB46D] rounded-xl w-[9.5rem] text-white  p-2 disabled:bg-gray-400 disabled:cursor-not-allowed'  > Add a photo </button>
         </div>
 
 
