@@ -12,7 +12,7 @@ const PhotosList = dynamic(() => import('../components/photoslist'), {
 const Home: NextPage = () => {
   const modal = useAtomValue(modalAtom);
   return (
-    <div className="h-screen w-screen justify-center items-center overflow-x-hidden" >
+    <div className="h-screen w-screen p-6" >
       <Navbar/>
       {
         modal &&
